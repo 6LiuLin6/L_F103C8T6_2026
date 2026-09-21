@@ -21,6 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "port.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -92,6 +93,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  modbusInit();
 
   /* USER CODE END 2 */
 
@@ -99,6 +101,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    modbusPoll();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
