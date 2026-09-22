@@ -46,6 +46,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    ThirdParty/L_Modbus/ModbusInterrupts.c
 )
 
 # Add include paths
@@ -56,6 +57,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
+)
+
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+    -Wl,--wrap=HAL_UART_IRQHandler
 )
 
 # Remove wrong libob.a library dependency when using cpp files

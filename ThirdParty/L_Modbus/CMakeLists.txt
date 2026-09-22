@@ -25,6 +25,10 @@ target_include_directories(${MODULE_NAME} PUBLIC
     ${FREEMODBUS_DIR}/demo/STM32_CMAKE/port
 )
 
+target_compile_options(${MODULE_NAME} INTERFACE
+    "$<$<COMPILE_LANGUAGE:C>:-include${FREEMODBUS_DIR}/demo/STM32_CMAKE/port/port.h>"
+)
+
 target_compile_definitions(${MODULE_NAME} PRIVATE
     MB_USART_NR=1
     MB_ASCII_ENABLED=0
