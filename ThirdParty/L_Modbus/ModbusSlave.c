@@ -1,6 +1,7 @@
 #include "mb.h"
 #include "port_internal.h"
 #include "main.h"
+#include <stdio.h>
 
 #define MODBUS_SLAVE_ADDRESS 1U
 #define MODBUS_BAUDRATE 115200UL
@@ -11,6 +12,7 @@
 
 static USHORT input_registers[INPUT_COUNT];
 static USHORT holding_registers[HOLDING_COUNT];
+static uint32_t last_register_print_tick;
 
 void modbusInit(void)
 {
@@ -35,11 +37,19 @@ void modbusPoll(void)
 {
     (void)eMBPoll();
     input_registers[0]++;
+
+    if (HAL_GetTick() - last_register_print_tick >= 1000U)
+    {
+        printf("holding[0]=%u\r\n", (unsigned)holding_registers[0]);
+        last_register_print_tick = HAL_GetTick();
+    }
 }
 
 eMBErrorCode eMBRegInputCB(UCHAR *buffer, USHORT address, USHORT count)
 {
     USHORT index;
+
+    address--;
 
     if (address < INPUT_START || count > INPUT_COUNT ||
         address - INPUT_START > INPUT_COUNT - count)
@@ -61,6 +71,8 @@ eMBErrorCode eMBRegHoldingCB(UCHAR *buffer, USHORT address, USHORT count,
                              eMBRegisterMode mode)
 {
     USHORT index;
+
+    address--;
 
     if (address < HOLDING_START || count > HOLDING_COUNT ||
         address - HOLDING_START > HOLDING_COUNT - count)

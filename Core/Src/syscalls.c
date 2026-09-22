@@ -29,6 +29,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/times.h>
+#include "usart.h"
 
 
 /* Variables */
@@ -41,6 +42,13 @@ char **environ = __env;
 
 
 /* Functions */
+int __io_putchar(int ch)
+{
+  uint8_t byte = (uint8_t)ch;
+  HAL_UART_Transmit(&huart2, &byte, 1U, HAL_MAX_DELAY);
+  return ch;
+}
+
 void initialise_monitor_handles()
 {
 }
