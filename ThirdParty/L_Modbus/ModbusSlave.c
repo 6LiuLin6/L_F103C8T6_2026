@@ -31,16 +31,24 @@ void modbusInit(void)
     {
         Error_Handler();
     }
+
+    holding_registers[0] = 0x1234U;
+    holding_registers[1] = 0x5678U;
 }
 
 void modbusPoll(void)
 {
+    uint32_t value32;
+
     (void)eMBPoll();
     input_registers[0]++;
+    value32 = ((uint32_t)holding_registers[0] << 16)
+            | holding_registers[1];
 
     if (HAL_GetTick() - last_register_print_tick >= 1000U)
     {
-        printf("holding[0]=%u\r\n", (unsigned)holding_registers[0]);
+        printf("holding32=0x%08lX (%lu)\r\n",
+               (unsigned long)value32, (unsigned long)value32);
         last_register_print_tick = HAL_GetTick();
     }
 }
